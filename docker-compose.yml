@@ -3,8 +3,8 @@ version: '3.4'
 services:
   
   api:
-    build: ./AuthService/
-    env_file: ./AuthService/Env.env
+    build: ./DockerApp/
+    env_file: ./DockerApp/Dockerfile.env
     environment:
       - MAIL_SERVER=1000.10000.10000.10000
       - ASPNETCORE_ENVIRONMENT=Debug

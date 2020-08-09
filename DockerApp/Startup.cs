@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace AuthService
+
+namespace DockerApp
 {
-    class Startup
+    public class Startup
     {
-        private IConfigurationRoot Configuration { get; }
+        public IConfigurationRoot Configuration { get; }
         static private Startup obj = null;
 
         private Startup()
