@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
-
+using DockerApp.models;
+using System;
 
 namespace DockerApp
 {
@@ -8,6 +9,7 @@ namespace DockerApp
     {
         public IConfigurationRoot Configuration { get; }
         static private Startup obj = null;
+
 
         private Startup()
         {

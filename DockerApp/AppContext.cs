@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DockerApp.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +25,6 @@ namespace DockerApp
             //Database.EnsureDeleted();
             Database.EnsureCreated();
             ChecDB();
-
         }
 
         private async void ChecDB()
@@ -36,9 +32,7 @@ namespace DockerApp
             await Task.Run(() =>
             {
                 int countGroup = Groups.ToListAsync().Result.Count;
-                int countUser = Users.ToListAsync().Result.Count;
-
-                if (countGroup == 0 && countUser == 0)
+                if (countGroup == 0)
                 {
                     Group g1 = new Group { Name = "User" };
                     Group g2 = new Group { Name = "Guest" };
@@ -47,13 +41,22 @@ namespace DockerApp
                     Groups.AddRange(g1, g2, g3, g4);
                     SaveChanges();
 
-                    User.createUser("superuser", "password", "Administrator");
+                    int salt = Crypto.GenerateSaltForPassword();
+                    byte[] hash = Crypto.ComputePasswordHash("password", salt);
+
+                    User su = new User { 
+                        Login = "Administrator",
+                        Group = g4,
+                        PasswordSalt = salt,
+                        PasswordHash = hash
+                    };
+                    Users.Add(su);
                     SaveChanges();
-                }
-            });
-                 
+                }            
+            });          
         }
 
+   
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {

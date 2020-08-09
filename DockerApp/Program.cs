@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System;
 using System.Text;
 using System.Threading;
@@ -8,32 +10,18 @@ namespace DockerApp
     class Program
     {
         static IConfigurationRoot config = Startup.Config();
-        static AppContext context = AppContext.GetContext();
-
         static void Main(string[] args)
         {
+            AppContext.GetContext();
+            Rabbit rabbit = new Rabbit();
 
-         
-            string nn = config["Database:ConnectionString"];
-            string mode = config["RabbitMQ:ConnectionString"];
-            string test = config["TEST"];
+            string queue = "demoqueue";
+            var channel = rabbit.getChannel(queue);
 
-            Console.WriteLine(nn);
-            Console.WriteLine(mode);
-            Console.WriteLine(test);
+            MessageReceiver messageReceiver = new MessageReceiver(channel);
+            channel.BasicConsume(queue, false, messageReceiver);
 
-            //RabbitMQ connect = new RabbitMQ();
-
-            while (true)
-            {
-
-                Thread.Sleep(5000);
-            }
+            Console.ReadLine();
         }
-        
-
     }
-
-
-   
 }
