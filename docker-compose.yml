@@ -2,7 +2,8 @@ version: '3.4'
 
 services:
   
-  api:
+  auth:
+    container_name: AuthService
     build: ./DockerApp/
     env_file: ./DockerApp/Dockerfile.env
     environment:
