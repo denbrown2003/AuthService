@@ -45,10 +45,10 @@ namespace DockerApp
                     Group g3 = new Group { Name = "Manager" };
                     Group g4 = new Group { Name = "Administrator" };
                     Groups.AddRange(g1, g2, g3, g4);
-                    obj.SaveChanges();
+                    SaveChanges();
 
                     User.createUser("superuser", "password", "Administrator");
-                    obj.SaveChanges();
+                    SaveChanges();
                 }
             });
                  

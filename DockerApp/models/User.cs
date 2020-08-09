@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 
 namespace DockerApp.models
 {
@@ -33,6 +32,49 @@ namespace DockerApp.models
                 db.Users.Add(user);
                 db.SaveChanges();
                 return user;
+            }
+        }
+
+        static public User getUser(string login)
+        {
+            using (AppContext db = AppContext.GetContext())
+            {
+                return db.Users.Include(u => u.Group).Single(u => u.Login == login);
+            }
+        }
+        static public User getUser(int Id)
+        {
+            using (AppContext db = AppContext.GetContext())
+            {
+                return db.Users.Include(u => u.Group).Single(u => u.Id == Id);
+            }
+        }
+
+
+        static public User validatingUser(string login, string password)
+        {
+            using (AppContext db = AppContext.GetContext())
+            {
+                try
+                {
+                    User user = db.Users.Include(u => u.Group).Single(u => u.Login == login);
+                    int salt = user.PasswordSalt;
+                    byte[] hash = user.PasswordHash;
+                    if (Crypto.IsPasswordValid(password, salt, hash))
+                        return user;
+                    else return null;
+                }
+                catch { return null; }
+            }
+        }
+
+
+
+        static public List<User> getUserList()
+        {
+            using (AppContext db = AppContext.GetContext())
+            {
+                return db.Users.Include(u => u.Group).ToList();
             }
         }
     }
