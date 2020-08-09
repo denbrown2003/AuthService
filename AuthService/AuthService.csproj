@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <DockerfileRunEnvironmentFiles>Env.env</DockerfileRunEnvironmentFiles>
   </PropertyGroup>
 
   <ItemGroup>
