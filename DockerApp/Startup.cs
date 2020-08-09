@@ -15,6 +15,7 @@ namespace DockerApp
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
         }
 
         static public IConfigurationRoot Config()

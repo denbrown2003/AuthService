@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+
+namespace DockerApp.models
+{
+    class User
+    {
+        public int Id { get; set; }
+        public string Login { get; set; }
+        [ForeignKey("GruopId")]
+        public Group Group { get; set; }
+        public int PasswordSalt { set; get; }
+        public byte[] PasswordHash { set; get; }
+
+
+        static public User createUser(string Login, string password, string Group)
+        {
+            int salt = Crypto.GenerateSaltForPassword();
+            byte[] hash = Crypto.ComputePasswordHash(password, salt);
+            using (AppContext db = AppContext.GetContext())
+            {
+                var groupInstance = db.Groups.Single(g => g.Name == Group);
+                User user = new User
+                {
+                    Login = Login,
+                    Group = groupInstance,
+                    PasswordSalt = salt,
+                    PasswordHash = hash
+                };
+                db.Users.Add(user);
+                db.SaveChanges();
+                return user;
+            }
+        }
+    }
+}
